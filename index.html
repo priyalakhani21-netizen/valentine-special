@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>I Love You Shrey ❤️</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: radial-gradient(circle at top, #ff9a9e, #fad0c4);
+  font-family: 'Comic Sans MS', 'Segoe UI', cursive;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 25px;
+  text-align: center;
+  max-width: 360px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  z-index: 2;
+  animation: bounceIn 1.2s ease;
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+h1 { color: #e6005c; }
+
+p { color: #444; }
+
+.btn {
+  margin: 10px;
+  padding: 12px 26px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.yes { background: #ff3366; color: white; }
+.no  { background: #ddd; position: absolute; }
+
+.heart {
+  position: absolute;
+  font-size: 22px;
+  animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh); opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* I LOVE YOU animation */
+.love-text {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ff0055;
+  animation: glow 1.5s infinite alternate, float 3s ease-in-out infinite;
+}
+
+@keyframes glow {
+  from { text-shadow: 0 0 10px #ff99bb; }
+  to   { text-shadow: 0 0 25px #ff0055; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- 🎵 Background Music -->
+<audio id="bgMusic" autoplay loop>
+  <source src="https://cdn.pixabay.com/audio/2022/02/23/audio_3b7c4c2f36.mp3" type="audio/mpeg">
+</audio>
+
+<canvas id="fireworks"></canvas>
+
+<div class="card" id="card">
+  <h1>💖 Shrey 💖</h1>
+  <p>
+    Roses are red 🌹<br>
+    Chocolates are sweet 🍫<br>
+    My heart skips a beat 💓<br>
+    Every time we meet 😘<br><br>
+    <strong>Will you be my Valentine?</strong>
+  </p>
+
+  <button class="btn yes" onclick="yesClick()">YES 💘</button>
+  <button class="btn no" id="noBtn">NO 🙈</button>
+</div>
+
+<script>
+/* Music fallback */
+document.body.addEventListener("click", () => {
+  document.getElementById("bgMusic").play();
+}, { once: true });
+
+/* Floating hearts */
+setInterval(() => {
+  const h = document.createElement("div");
+  h.className = "heart";
+  h.innerHTML = "❤️";
+  h.style.left = Math.random() * 100 + "vw";
+  document.body.appendChild(h);
+  setTimeout(() => h.remove(), 6000);
+}, 400);
+
+/* NO button runs away */
+const noBtn = document.getElementById("noBtn");
+noBtn.addEventListener("mouseover", () => {
+  noBtn.style.left = Math.random() * 70 + "%";
+  noBtn.style.top  = Math.random() * 70 + "%";
+});
+
+/* YES click */
+function yesClick() {
+  document.getElementById("card").innerHTML = `
+    <div class="love-text">❤️ I LOVE YOU SHREY ❤️</div>
+    <p>
+      You just made my world brighter ✨<br><br>
+      Happy Valentine’s Day 💖
+    </p>
+  `;
+  startFireworks();
+}
+
+/* Fireworks */
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+let particles = [];
+
+function startFireworks() {
+  setInterval(() => {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height / 2;
+    for (let i = 0; i < 40; i++) {
+      particles.push({
+        x, y,
+        dx: Math.cos(Math.random()*6.28)*4,
+        dy: Math.sin(Math.random()*6.28)*4,
+        life: 60
+      });
+    }
+  }, 600);
+  animate();
+}
+
+function animate() {
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,i)=>{
+    p.x+=p.dx; p.y+=p.dy; p.life--;
+    ctx.fillStyle="rgba(255,0,120,0.8)";
+    ctx.beginPath(); ctx.arc(p.x,p.y,3,0,6.28); ctx.fill();
+    if(p.life<=0) particles.splice(i,1);
+  });
+  requestAnimationFrame(animate);
+}
+</script>
+
+</body>
+</html>
